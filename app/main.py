@@ -87,7 +87,7 @@ async def upload_video(file: UploadFile = File(...), langs: Optional[str] = Quer
 
         # transcribe & translate -> VTTs
         results = await asyncio.get_event_loop().run_in_executor(
-            None, lambda: transcribe_to_vtt_many(str(save_path), VTT_DIR, requested)
+            None, lambda: transcribe_to_vtt_many(str(save_path), VTT_DIR, requested, video_id)
         )
 
         tracks = []
@@ -114,6 +114,8 @@ async def upload_video(file: UploadFile = File(...), langs: Optional[str] = Quer
     except HTTPException:
         raise
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Upload failed: {e}")
 
 @app.get("/api/search")

@@ -69,12 +69,13 @@ def transcribe_core(audio_path: str) -> List[Dict[str, Any]]:
         segments = [{"start": 0.0, "end": 0.01, "text": result["text"]}]
     return segments
 
-def transcribe_to_vtt_many(media_path: str, vtt_dir: Path, langs: List[str]) -> Dict[str, str]:
+def transcribe_to_vtt_many(media_path: str, vtt_dir: Path, langs: List[str], video_id: str = None) -> Dict[str, str]:
     """
     Returns a dict of {lang_code: vtt_path_str}
     """
     p = Path(media_path)
-    video_id = p.stem  # may include uuid from API
+    if video_id is None:
+        video_id = p.stem  # may include uuid from API
     base_segments = transcribe_core(media_path)
 
     out = {}
